@@ -28,7 +28,11 @@ class Amqp
             ->setup();
 
         if (is_string($message)) {
-            $message = new Message($message, ['content_type' => 'text/plain', 'delivery_mode' => 2]);
+            $message = new Message($message, [
+                'content_type' => 'text/plain',
+                'delivery_mode' => 2,
+                'message_id' => $properties['message_id'] ?: md5(uniqid($routing)),
+            ]);
         }
 
         $publisher->publish($routing, $message);
